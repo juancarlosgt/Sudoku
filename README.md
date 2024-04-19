@@ -17,3 +17,6 @@ Actualmente, el proyecto se encuentra en fase de desarrollo inicial. Se han impl
 - Mejorar la interfaz gráfica para que sea más intuitiva y atractiva para los usuarios.
 - Permitir a los usuarios guardar y cargar partidas en progreso.
 - Implementar diferentes niveles de dificultad para los sudokus generados.
+
+## Sitio Web
+[Sudoku](https://juancarlosgt.github.io/Sudoku/)
