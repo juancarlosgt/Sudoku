@@ -1,28 +1,55 @@
 const container = document.querySelector(".sudoku-container");
 const matriz = new Array(9).fill().map(() => new Array(9));
+const botones = document.querySelectorAll(".boton");
+const imagen = document.querySelector(".img-switch");
+const lightmode = document.querySelector(".switch");
+const header = document.querySelector("header")
 let count = 1;
 crear();
-matriz.forEach(arreglo => {
-  arreglo.forEach(elemento => {
+matriz.forEach((arreglo) => {
+  arreglo.forEach((elemento) => {
     const item = document.createElement("div");
     item.classList.add("item-sudoku");
     item.setAttribute("id", `${count}`);
     item.innerHTML = `${elemento}`;
-    container.append(item)
+    container.append(item);
     count++;
-  })
+  });
 });
 const cuadros = document.querySelectorAll(".item-sudoku");
 let last = null;
-let boton = null;
-cuadros.forEach(cuadro => cuadro.addEventListener('click', (event) => {
+let celda = null;
+let selected = null;
+cuadros.forEach((cuadro) => cuadro.addEventListener("click", (event) => {
   const itemId = event.currentTarget.id;
-  boton = document.getElementById(itemId);
+  celda = document.getElementById(itemId);
   if (last != null) last.classList.toggle("active");
-  boton.classList.toggle("active");
+  celda.classList.toggle("active");
   console.log(itemId);
-  last = boton;
+  selected = celda;
+  last = celda;
+})
+);
+botones.forEach(boton => boton.addEventListener("click", (event) => {
+  const itemId = event.currentTarget.id;
+  let num = itemId == "borrar" ? "" : itemId.replace("boton", "");
+  if (selected != null) {
+    selected.innerHTML = `${num}`;
+  }
 }));
+lightmode.addEventListener("change", (event) => {
+  if (event.target.checked) {
+    imagen.setAttribute("src","sun.png")
+    imagen.classList.toggle("active");
+    document.body.classList.toggle("dark-mode");
+    header.classList.toggle("dark-mode");
+  } else {
+    imagen.setAttribute("src","moon.png")  
+    imagen.classList.toggle("active");  
+    document.body.classList.toggle("dark-mode");
+    header.classList.toggle("dark-mode");
+  }
+});
 
 /**
  * Funciones para crear el Sudoku
@@ -56,7 +83,9 @@ function ponerCeros(i) {
 }
 
 function sePuede(n, i, j) {
-  return !existeHorizontal(n, i) && !existeVertical(n, j) && !existe3x3(n, i, j);
+  return (
+    !existeHorizontal(n, i) && !existeVertical(n, j) && !existe3x3(n, i, j)
+  );
 }
 
 function existeHorizontal(n, i) {
@@ -80,7 +109,10 @@ function existeVertical(n, j) {
 function existe3x3(n, y, x) {
   for (let i = Math.floor(y / 3) * 3; i < matriz.length; i++) {
     for (let j = Math.floor(x / 3) * 3; j < matriz[i].length; j++) {
-      if (Math.floor(y / 3) === Math.floor(i / 3) && Math.floor(x / 3) === Math.floor(j / 3)) {
+      if (
+        Math.floor(y / 3) === Math.floor(i / 3) &&
+        Math.floor(x / 3) === Math.floor(j / 3)
+      ) {
         if (matriz[i][j] === n) {
           return true;
         }
