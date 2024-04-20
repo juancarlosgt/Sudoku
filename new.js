@@ -6,16 +6,28 @@ const lightmode = document.querySelector(".switch");
 const header = document.querySelector("header")
 let count = 1;
 crear();
+copia = { ...matriz };
+let borrarCelda = 60;
 matriz.forEach((arreglo) => {
   arreglo.forEach((elemento) => {
     const item = document.createElement("div");
     item.classList.add("item-sudoku");
     item.setAttribute("id", `${count}`);
+    item.setAttribute("editable", false);
+    item.classList.add("editable");
     item.innerHTML = `${elemento}`;
     container.append(item);
     count++;
   });
 });
+while (borrarCelda--) {
+  const numero = Math.floor(1 + Math.random() * 81);
+  console.log(numero);
+  div = document.getElementById(numero);
+  div.innerHTML = ``;
+  div.setAttribute("editable",true);
+  div.classList.remove("editable")
+}
 const cuadros = document.querySelectorAll(".item-sudoku");
 let last = null;
 let celda = null;
@@ -33,19 +45,19 @@ cuadros.forEach((cuadro) => cuadro.addEventListener("click", (event) => {
 botones.forEach(boton => boton.addEventListener("click", (event) => {
   const itemId = event.currentTarget.id;
   let num = itemId == "borrar" ? "" : itemId.replace("boton", "");
-  if (selected != null) {
+  if (selected != null && selected.attributes[2].value != "false") {
     selected.innerHTML = `${num}`;
   }
 }));
 lightmode.addEventListener("change", (event) => {
   if (event.target.checked) {
-    imagen.setAttribute("src","sun.png")
+    imagen.setAttribute("src", "sun.png")
     imagen.classList.toggle("active");
     document.body.classList.toggle("dark-mode");
     header.classList.toggle("dark-mode");
   } else {
-    imagen.setAttribute("src","moon.png")  
-    imagen.classList.toggle("active");  
+    imagen.setAttribute("src", "moon.png")
+    imagen.classList.toggle("active");
     document.body.classList.toggle("dark-mode");
     header.classList.toggle("dark-mode");
   }
