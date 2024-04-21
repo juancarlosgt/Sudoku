@@ -8,6 +8,7 @@ let count = 1;
 crear();
 copia = { ...matriz };
 let borrarCelda = 60;
+
 matriz.forEach((arreglo) => {
   arreglo.forEach((elemento) => {
     const item = document.createElement("div");
@@ -17,15 +18,20 @@ matriz.forEach((arreglo) => {
     item.classList.add("editable");
     item.innerHTML = `${elemento}`;
     container.append(item);
+    if(count%3==0 && count%9!=0){
+      item.classList.add("right")
+    }
+    if((count>=19 && count <=27) || (count>=46 && count <=54)){
+      item.classList.add("bottom")
+    }
     count++;
   });
 });
 while (borrarCelda--) {
   const numero = Math.floor(1 + Math.random() * 81);
-  console.log(numero);
   div = document.getElementById(numero);
   div.innerHTML = ``;
-  div.setAttribute("editable",true);
+  div.setAttribute("editable", true);
   div.classList.remove("editable")
 }
 const cuadros = document.querySelectorAll(".item-sudoku");
@@ -37,11 +43,11 @@ cuadros.forEach((cuadro) => cuadro.addEventListener("click", (event) => {
   celda = document.getElementById(itemId);
   if (last != null) last.classList.toggle("active");
   celda.classList.toggle("active");
-  console.log(itemId);
   selected = celda;
   last = celda;
-})
-);
+  paint(itemId);
+}));
+
 botones.forEach(boton => boton.addEventListener("click", (event) => {
   const itemId = event.currentTarget.id;
   let num = itemId == "borrar" ? "" : itemId.replace("boton", "");
@@ -62,7 +68,49 @@ lightmode.addEventListener("change", (event) => {
     header.classList.toggle("dark-mode");
   }
 });
-
+function paint(n) {
+  cuadros.forEach(cuadro => {
+    cuadro.classList.remove("paint");
+  })
+  let temp = n - 1;
+  while (temp % 9 != 0) {
+    item = document.getElementById(temp);
+    item.classList.toggle("paint");
+    temp--;
+  }
+  temp = parseInt(n);
+  let c = 0;
+  while (temp % 9 != 0 && n % 9 != 0) {
+    temp++;
+    item = document.getElementById(temp);
+    item.classList.toggle("paint");
+  }
+  temp = n - 9;
+  while (temp > 0) {
+    item = document.getElementById(temp);
+    item.classList.toggle("paint");
+    temp = temp - 9;
+  }
+  temp = parseInt(n) + 9;
+  while (temp <= 81) {
+    item = document.getElementById(temp);
+    item.classList.toggle("paint");
+    temp = temp + 9;
+  }
+  let y = Math.ceil(n / 9) - 1
+  let x = (n % 9 == 0 ? 9 : n % 9) - 1;
+  cuadros.forEach(cuadro => {
+    let v = cuadro.id;
+    let yi = Math.ceil(v / 9) - 1;
+    let xi = (v % 9 == 0 ? 9 : v % 9) - 1;
+    if (
+      Math.floor(y / 3) === Math.floor(yi / 3) &&
+      Math.floor(x / 3) === Math.floor(xi / 3) && (xi != x && yi != y)
+    ) {
+      cuadro.classList.add("paint");
+    }
+  })
+}
 /**
  * Funciones para crear el Sudoku
  */
