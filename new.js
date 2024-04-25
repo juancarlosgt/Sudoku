@@ -18,10 +18,10 @@ matriz.forEach((arreglo) => {
     item.classList.add("editable");
     item.innerHTML = `${elemento}`;
     container.append(item);
-    if(count%3==0 && count%9!=0){
+    if (count % 3 == 0 && count % 9 != 0) {
       item.classList.add("right")
     }
-    if((count>=19 && count <=27) || (count>=46 && count <=54)){
+    if ((count >= 19 && count <= 27) || (count >= 46 && count <= 54)) {
       item.classList.add("bottom")
     }
     count++;
@@ -46,6 +46,7 @@ cuadros.forEach((cuadro) => cuadro.addEventListener("click", (event) => {
   selected = celda;
   last = celda;
   paint(itemId);
+  comprobar(cuadro)
 }));
 
 botones.forEach(boton => boton.addEventListener("click", (event) => {
@@ -53,6 +54,7 @@ botones.forEach(boton => boton.addEventListener("click", (event) => {
   let num = itemId == "borrar" ? "" : itemId.replace("boton", "");
   if (selected != null && selected.attributes[2].value != "false") {
     selected.innerHTML = `${num}`;
+    comprobar(selected)
   }
 }));
 lightmode.addEventListener("change", (event) => {
@@ -70,7 +72,7 @@ lightmode.addEventListener("change", (event) => {
 });
 function paint(n) {
   cuadros.forEach(cuadro => {
-    cuadro.classList.remove("paint");
+    cuadro.classList.remove("paint","error");
   })
   let temp = n - 1;
   while (temp % 9 != 0) {
@@ -78,8 +80,7 @@ function paint(n) {
     item.classList.toggle("paint");
     temp--;
   }
-  temp = parseInt(n);
-  let c = 0;
+  temp = parseInt(n);  
   while (temp % 9 != 0 && n % 9 != 0) {
     temp++;
     item = document.getElementById(temp);
@@ -112,6 +113,73 @@ function paint(n) {
   })
 }
 /**
+ * Funciones para comprobar el sudoku
+ */
+function comprobar(item) {
+  cuadros.forEach(cuadro => {
+    cuadro.classList.remove("error");
+  })
+  comprobarHori(item);
+  comprobarVerti(item);
+  comprobar3x3(item);
+}
+function comprobarHori(element){
+  let value = parseInt(element.innerHTML)
+  let temp = parseInt(element.id) - 1
+  while (temp % 9 != 0) {
+    item = document.getElementById(temp);    
+    if(value == parseInt(item.innerHTML)){
+      item.classList.toggle("error");
+    }
+    temp--;
+  }
+  temp = parseInt(element.id);  
+  while (temp % 9 != 0 && element.id % 9 != 0) {
+    temp++;
+    item = document.getElementById(temp);
+    if(value == parseInt(item.innerHTML)){
+      item.classList.toggle("error");
+    }
+  }
+
+}
+function comprobarVerti(element){
+  let value = parseInt(element.innerHTML)
+  let temp = element.id - 9;
+  while (temp > 0) {
+    item = document.getElementById(temp);
+    if(value == parseInt(item.innerHTML)){
+      item.classList.toggle("error");
+    }
+    temp = temp - 9;
+  }
+  temp = parseInt(element.id) + 9;
+  while (temp <= 81) {
+    item = document.getElementById(temp);
+    if(value == parseInt(item.innerHTML)){
+      item.classList.toggle("error");
+    }
+    temp = temp + 9;
+  }
+}
+function comprobar3x3(element){
+  let value = parseInt(element.innerHTML)
+  let n = parseInt(element.id)
+  let y = Math.ceil(n / 9) - 1
+  let x = (n % 9 == 0 ? 9 : n % 9) - 1;
+  cuadros.forEach(cuadro => {
+    let v = cuadro.id;
+    let yi = Math.ceil(v / 9) - 1;
+    let xi = (v % 9 == 0 ? 9 : v % 9) - 1;
+    if (
+      Math.floor(y / 3) === Math.floor(yi / 3) &&
+      Math.floor(x / 3) === Math.floor(xi / 3) && (xi != x && yi != y)
+    ) {
+      if(value==cuadro.innerHTML)cuadro.classList.toggle("error");      
+    }
+  })
+}
+/**
  * Funciones para crear el Sudoku
  */
 function crear() {
@@ -127,7 +195,7 @@ function crear() {
         j--;
         cont++;
       }
-      if (cont > 20) {
+      if (cont > 50) {
         ponerCeros(i);
         cont = 0;
         j = -1;

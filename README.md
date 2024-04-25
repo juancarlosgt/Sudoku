@@ -13,7 +13,7 @@ Actualmente, el proyecto se encuentra en fase de desarrollo inicial. Se han impl
 
 ## Próximos Pasos
 
-- Implementar la lógica para validar los números ingresados por los usuarios y verificar si el tablero está completo y correcto.
+- Implementar la lógica verificar si el tablero está completo y correcto.
 - Mejorar la interfaz gráfica para que sea más intuitiva y atractiva para los usuarios.
 - Permitir a los usuarios guardar y cargar partidas en progreso.
 - Implementar diferentes niveles de dificultad para los sudokus generados.

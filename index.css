@@ -68,7 +68,8 @@ main {
   text-align: center;
   width: 3rem;
   height: 3rem;
-  transition: all .3s;
+  transition: all .3s;  
+  box-sizing: border-box;
 }
 
 .item-sudoku:hover {
@@ -91,6 +92,9 @@ main {
 }
 .item-sudoku.bottom{
   border-bottom-width: 3px;
+}
+.item-sudoku.error{
+  background-color: rgb(238, 82, 82);
 }
 .teclado {
   position: relative;
